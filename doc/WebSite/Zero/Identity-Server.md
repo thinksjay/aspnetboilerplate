@@ -187,6 +187,14 @@ We can then add the middleware to the Startup class as shown below:
 
     services.AddAuthentication().AddIdentityServerAuthentication("IdentityBearer", options =>
     {
+        Dictionary<string, string> inboundJwtClaimTypeMap = new Dictionary<string, string>();
+        inboundJwtClaimTypeMap.Add(JwtClaimTypes.Subject,ClaimTypes.NameIdentifier );
+        inboundJwtClaimTypeMap.Add(JwtClaimTypes.Name, ClaimTypes.Name);
+        inboundJwtClaimTypeMap.Add(JwtClaimTypes.Role, ClaimTypes.Role);
+		
+		//If InboundJwtClaimTypeMap is not set, IAbpSession. User is null
+        options.InboundJwtClaimTypeMap = inboundJwtClaimTypeMap;
+        
         options.Authority = "http://localhost:62114/";
         options.RequireHttpsMetadata = false;
     });
